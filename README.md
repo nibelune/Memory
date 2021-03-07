@@ -14,7 +14,7 @@ Le serveur sert la page du jeu (template pug) et expose une petite api sur la ro
   GET /scores renvoie la liste des scores  
   POST /scores permet d'ajouter un score
 
-Côté front, la page charge le javascript client et la feuille de style du jeu.
+Côté front, la page charge le javascript client et la feuille de style du jeu.  
 app.js instancie le jeu.
 
 Le jeu lui même repose sur une architechture MVC
