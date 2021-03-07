@@ -1,0 +1,54 @@
+.card {
+  background-color: transparent;
+  width: 100px;
+  height: 100px;
+  perspective: 1000px;
+  margin: 10px;
+  cursor: pointer;
+  &.is-flipped,
+  &.is-matched {
+    cursor: auto;
+    .card-faces-container {
+      transform: rotateY(180deg);
+    }
+  }
+  &.is-flipped {
+    .card-face-front,
+    .card-face-back {
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+  }
+  .card-faces-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+    pointer-events: none;
+  }
+  .card-face-front,
+  .card-face-back {
+    border-radius: 8px;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.5s;
+  }
+  .card-face-back {
+    background-color: #16a085;
+  }
+  .card-face-front {
+    background-color: #fff;
+    background-image: url("/images/cards.png");
+    transform: rotateY(180deg);
+  }
+  // set classes for background image position
+  @for $i from 1 through ($cardsQty) {
+    .card-face-#{$i} {
+      background-position: 0 ($i - 1) * 100px;
+    }
+  }
+}
