@@ -18,7 +18,7 @@ Le jeu repose sur une architechture MVC
 
 ### Le back
 
-Le back repose également sur une architecture de type MVC. Il utilise Express, d'une part pour servir la page html du jeu, générée à partir d'un template (pug) et d'autre part exposer une api pour lire la liste des scores et ajouter un nouveau score.
+Le back repose également sur une architecture de type MVC. Il utilise Express, d'une part pour servir la page html du jeu, générée à partir d'un template (pug) et d'autre part exposer une api pour interagir avec la base de données.
 
 Le serveur reçoit une requête. En fonction de la route appelée et du verbe http utilisé le routeur invoque la fonction correspondante du controleur. Cette derniére traite la demande et renvoie la réponse adéquate.
 
