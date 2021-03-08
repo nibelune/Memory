@@ -157,6 +157,9 @@ export default class MemoryView extends EventEmitter {
    * @param {Number} elapsed - time elapsed before victory
    */
   onVictory(elapsed, highscores) {
+    //remove click event handler
+    this.CardsContainer.onclick = null;
+    
     setTimeout(() => {
       const container = document.createElement("div");
       const scoresList = this.buildHighscores(highscores);

@@ -15,12 +15,13 @@ Le serveur sert la page du jeu (template pug) et expose une petite api sur la ro
   POST /scores permet d'ajouter un score
 
 Côté front, la page charge le javascript client et la feuille de style du jeu.  
-app.js instancie le jeu.
 
-Le jeu lui même repose sur une architechture MVC
-  - le modéle a en charge la gestion de l'état et de la logique du jeu
+## Le front
+
+Le jeu repose sur une architechture MVC
+  - le modéle a en charge la gestion de l'état, la logique du jeu et la communication avec l'API
   - la vue constitue l'interface avec laquelle le joueur interagit
-  - le controlleur permet la communication entre le modèle et la vue
+  - le controlleur permet la communication entre le modèle et la vue  
 
 ### installation
 
