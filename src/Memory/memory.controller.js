@@ -14,7 +14,7 @@ export default class MemoryController {
     this.model.on("turnresolved", (turn) => this.onTurnResolved(turn));
     this.model.on("victory", (elapsed, highscores) => this.onVictory(elapsed, highscores));
     this.model.on("timeupdate", (elasped, duration) => this.onTimeUpdate(elasped, duration));
-    this.model.on("timeout", () => this.onTimeout());
+    this.model.on("timeout", (highscores) => this.onTimeout(highscores));
 
     // view events
     this.view.on("cardselected", (cardIndex) => this.onCardSelected(cardIndex));
@@ -22,8 +22,8 @@ export default class MemoryController {
   }
 
   /**
-   * signal and pass turn resolution to view
-   * @param {Array} turn - an array with the index of the two mismatching cards
+   * notify view of turn resolution
+   * @param {Array} turn - an array of objects {match:{Boolean}, cards:{Array}}
    */
   onTurnResolved(turn) {
     console.log("onTurnResolved");
@@ -31,7 +31,7 @@ export default class MemoryController {
   }
 
   /**
-   * signal victory and pass time elapsed to view
+   * notify view of victory
    * @param {number} elapsed - duration of the game in seconds
    */
   onVictory(elapsed, highscores) {
@@ -39,14 +39,14 @@ export default class MemoryController {
   }
 
   /**
-   * signal end of time to the view
+   * notify view of timeout
    */
-  onTimeout() {
-    this.view.onTimeout();
+  onTimeout(highscores) {
+    this.view.onTimeout(highscores);
   }
 
   /**
-   * signal timer update to the view
+   * notify view of time update
    * @param {number} elapsed - duration of the game in ms
    * @param {number} duration - max duration of the game in ms
    */
@@ -56,25 +56,18 @@ export default class MemoryController {
   }
 
   /**
-   * signal and pass played cards to the model
-   * @param {array} cardsIndexes - indexes of the two played cards
+   * notify model of card selection
+   * @param {number} cardIndex - index of the selected card
    */
   onCardSelected(cardIndex) {
     this.model.selectCard(cardIndex);
   }
 
   /**
-   * return a shuffled array with all cards id, ie the board
+   * return a copy of the deck
    */
   getDeck() {
     return this.model.getDeck();
-  }
-
-  /**
-   * return highscores
-   */
-  getHighscores() {
-    return this.model.getHighScores();
   }
 
   /**

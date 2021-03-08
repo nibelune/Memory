@@ -2,14 +2,14 @@
  * Controller for scores routes
  */
 
-const { listScores, addScore } = require("../queries/scores.queries");
+const { readScores, createScore } = require("../queries/scores.queries");
 
 /**
  * get all scores
  */
-exports.scoresList = async (req, res, next) => {
+exports.scoresRead = async (req, res, next) => {
   try {
-    const scores = await listScores();
+    const scores = await readScores();
     res.json(scores);
   } catch (error) {
     next(error);
@@ -19,9 +19,9 @@ exports.scoresList = async (req, res, next) => {
 /**
  * add new score
  */
-exports.scoreAdd = async (req, res, next) => {
+exports.scoreCreate = async (req, res, next) => {
   try {
-    await addScore(req.body);
+    await createScore(req.body);
     res.json({ status: "ok" });
   } catch (error) {
     next(error);

@@ -3,10 +3,10 @@
  */
 
 const router = require("express").Router();
-const { scoresList , scoreAdd } = require("../controllers/scores.controller");
+const { scoresRead , scoreCreate } = require("../controllers/scores.controller");
 
 //link routes to controller functions
-router.get("/", scoresList);
-router.post("/", scoreAdd);
+router.get("/", scoresRead);
+router.post("/", scoreCreate);
 
 module.exports = router;

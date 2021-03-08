@@ -5,16 +5,16 @@
 const Score = require('../database/models/score.model');
 
 /**
- * query db to retrieve all scores
+ * query server to get and sort all scores
  */
-exports.listScores = () => {
-  return Score.find({}).exec();
+exports.readScores = () => {
+  return Score.find({}).sort({score:"asc"}).exec();
 }
 
 /**
- * query db to add a new score
+ * query server to add a new score
  */
-exports.addScore = (score) => {
+exports.createScore = (score) => {
   const newScore = new Score(score);
   return newScore.save();
 }

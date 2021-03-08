@@ -1,7 +1,7 @@
 /**
  * retrieve all scores from DB
  */
-exports.readScores = async () => {
+const readScores = async () => {
   return fetch("/scores", { method: "GET" })
     .then((response) => response.json())
     .then((data) => data.map((score) => score.score))
@@ -14,7 +14,7 @@ exports.readScores = async () => {
  * submit new score to server
  * @param {number} score - the score to add to DB.
  */
-exports.createScore = async (score) => {
+const createScore = async (score) => {
   return fetch("/scores", {
     method: "POST",
     body: JSON.stringify({ score }),
@@ -25,3 +25,8 @@ exports.createScore = async (score) => {
     console.error(error);
   });
 };
+
+export default {
+  readScores,
+  createScore
+}

@@ -3,10 +3,10 @@ import Popup from "./Popup";
 
 /**
  * Memory game view (DOM manipulations)
- * it emits 2 event: 
+ * it emits 2 event:
  *   "cardselected" when player select a card
  *   "restartgame" when player close end of game popup
- * 
+ *
  * @constructor
  * @param {HTMLElement} element - the html element where to append the memory game.
  */
@@ -141,14 +141,14 @@ export default class MemoryView extends EventEmitter {
    */
   onTurnResolved(turn) {
     setTimeout(() => {
-      const cardA = this.getCardByIndex(turn.cards[0]);
-      const cardB = this.getCardByIndex(turn.cards[1]);
+      const cards = [
+        this.getCardByIndex(turn.cards[0]),
+        this.getCardByIndex(turn.cards[1]),
+      ];
       if (turn.match) {
-        cardA.classList.add("is-matched");
-        cardB.classList.add("is-matched");
+        cards.forEach((card) => card.classList.add("is-matched"));
       }
-      cardA.classList.remove("is-flipped");
-      cardB.classList.remove("is-flipped");
+      cards.forEach((card) => card.classList.add("is-flipped"));
     }, 500);
   }
 
@@ -159,7 +159,7 @@ export default class MemoryView extends EventEmitter {
   onVictory(elapsed, highscores) {
     //remove click event handler
     this.CardsContainer.onclick = null;
-    
+
     setTimeout(() => {
       const container = document.createElement("div");
       const scoresList = this.buildHighscores(highscores);
@@ -175,7 +175,7 @@ export default class MemoryView extends EventEmitter {
   /**
    * handler for timeout
    */
-  onTimeout() {
+  onTimeout(highscores) {
     //set timer progress bar width
     const progressElement = this.element.querySelector(".progress");
     progressElement.style.width = "100%";
@@ -183,8 +183,11 @@ export default class MemoryView extends EventEmitter {
     //remove click event handler
     this.CardsContainer.onclick = null;
 
-    const container = document.createElement("p");
-    container.innerHTML = "vous avez perdu";
+    //build hiscores
+    const scoresList = this.buildHighscores(highscores);
+    const container = document.createElement("div");
+    container.innerHTML = "<p>vous avez perdu</p>";
+    container.appendChild(scoresList)
     new Popup(container, () => this.emit("restartgame"));
   }
 

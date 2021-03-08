@@ -1,4 +1,4 @@
-import { readScores, createScore } from "./memory.api";
+import API from "./memory.api";
 import EventEmitter from "../utils/EventEmitter";
 /**
  * Memory game model
@@ -12,7 +12,7 @@ export default class MemoryModel extends EventEmitter {
     super();
     this.deck = []; // the deck of cards
     this.selectedCards = []; // cards selected by player
-    this.maxScore = cardsInGame; // maximum score
+    this.victoryScore = cardsInGame; // maximum score
     this.score = 0; // current score
     this.startTime = 0; // time at begining of game
     this.elapsed = 0; // time elasped since begining of game
@@ -43,12 +43,13 @@ export default class MemoryModel extends EventEmitter {
   /**
    * update timer and check timeout
    */
-  updateTimer() {
+  async updateTimer() {
     const now = new Date().getTime();
     this.elapsed = now - this.startTime;
     if (this.elapsed > this.duration) {
       clearInterval(this.timerInterval);
-      this.emit("timeout");
+      const highscores = await API.readScores();
+      this.emit("timeout", highscores);
     } else {
       this.emit("timeupdate", this.elapsed, this.duration);
     }
@@ -83,7 +84,6 @@ export default class MemoryModel extends EventEmitter {
 
   /**
    * resolve a turn
-   * @param {Array} playedCards - array containing the index of 2 cards
    */
   resolveTurn() {
     let match;
@@ -102,10 +102,13 @@ export default class MemoryModel extends EventEmitter {
    * check victory
    */
   async checkVictory() {
-    if (this.score == this.maxScore) {
+    if (this.score === this.victoryScore) {
+      //stop timer
       clearInterval(this.timerInterval);
-      await createScore(parseInt(this.elapsed / 1000));
-      const highscores = await readScores();
+      //add sore to db
+      await API.createScore(parseInt(this.elapsed / 1000));
+      //retrieve scores from db
+      const highscores = await API.readScores();
       this.emit("victory", this.elapsed, highscores);
     }
   }
