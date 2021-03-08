@@ -22,7 +22,7 @@ Le back respose également sur une architecture de type MVC. Il utilise sur expr
 
 Le serveur reçoit une requête. En fonction de la route appelée et du verbe http utilisé le routeur invoque la fonction correspondante du controleur. Cette derniére traite la demande et renvoie la réponse adéquate.
 
-L'utilisation de mongoose permet de facilement valider les données (contrairement aux tables des bases SQL qui disposent de champs typés, le conteu des documents de mongoDB est dénormalisé, il est donc préférable de créer des schémas en amont)
+L'utilisation de mongoose permet de facilement valider les données (contrairement aux tables des bases SQL qui disposent de champs typés, le contenu des documents de mongoDB est dénormalisé, il est donc préférable de créer des schémas en amont)
 
 ## installation
 
@@ -39,3 +39,8 @@ dbUrl: "mongodb://localhost:27017/memory?retryWrites=true&w=majority",
 npm run start
 ```
 
+## Pistes d'améliorations
+
+- demander son nom à l'utilisataur afin de l'associer à son score
+- gestion des erreurs
+- tests
