@@ -7,23 +7,16 @@ Malbouffe, stress, abus en tout genre, Alzheimer nous guette tous ! Fais travail
 Front : html / css / js  
 Back : node / express / mongoDB / pug  
 
-### Comment ça fonctionne ?
+## Comment ça fonctionne ?
 
-Le serveur sert la page du jeu (template pug) et expose une petite api sur la route /scores  
-
-  GET /scores renvoie la liste des scores  
-  POST /scores permet d'ajouter un score
-
-Côté front, la page charge le javascript client et la feuille de style du jeu.  
-
-## Le front
+### Le front
 
 Le jeu repose sur une architechture MVC
   - le modéle a en charge la gestion de l'état, la logique du jeu et la communication avec l'API
   - la vue constitue l'interface avec laquelle le joueur interagit
   - le controlleur permet la communication entre le modèle et la vue
 
-## Le Back
+### Le Back
 
 Le back respose également sur une architecture de type MVC. Il utilise sur express, d'une part pour servir la page html du jeu, générée à partir d'un template (pug) et d'autre part exposer une api pour lire la liste des scores et ajouter un nouveau score.
 
@@ -31,7 +24,7 @@ Le serveur reçoit une requête. En fonction de la route appelée et du verbe ht
 
 L'utilisation de mongoose permet de facilement valider les données (contrairement aux tables des bases SQL qui disposent de champs typés, le conteu des documents de mongoDB est dénormalisé, il est donc préférable de créer des schémas en amont)
 
-### installation
+## installation
 
 1. récupération des modules utilisés 
 ```
