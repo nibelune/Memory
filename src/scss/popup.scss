@@ -1,4 +1,3 @@
-
 .popup {
   position: fixed;
   top: 30%;
@@ -33,8 +32,8 @@
 
 ul.highscores {
   list-style-type: none;
-  margin: 0 0 2rem 0; 
-  padding: 0;
+  margin: 0 0 2rem 0;
+  padding: 0 5px 0 0;
   max-height: 200px;
   overflow: auto;
   li {
@@ -44,5 +43,28 @@ ul.highscores {
   strong {
     margin-right: 20px;
     flex-grow: 1;
+  }
+
+  /* scrollbars */
+
+  /* Works on Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #000 #fff;
+  }
+
+  /* Works on Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #fff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #000;
+    border-radius: 20px;
+    border: 3px solid #fff;
   }
 }

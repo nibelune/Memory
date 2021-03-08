@@ -14,6 +14,8 @@ export default class EventEmitter {
    * @returns
    */
   on(evt, listener) {
+    //logical OR returns the first "truthy" expression
+    //if there is none, it returns the last expression
     (this.events[evt] || (this.events[evt] = [])).push(listener);
     return this;
   }
