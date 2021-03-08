@@ -11,6 +11,8 @@ Back : node / express / mongoDB / pug
 
 ### Le front
 
+app.js initialise le jeu (on peut de là changer le nombres de cartes ou la durée d'une partie pour faciliter les tests)
+
 Le jeu repose sur une architechture MVC
   - le modéle a en charge la gestion de l'état, la logique du jeu et la communication avec l'API
   - la vue constitue l'interface avec laquelle le joueur interagit
