@@ -17,6 +17,10 @@ export default {
     noderesolve(),
     babel({ babelHelpers: "bundled" }),
     terser(),
-    scss({ output: "public/css/memory.css", outputStyle: "compressed" }),
+    scss({
+      output: "public/css/memory.css",
+      outputStyle: "compressed",
+      watch: "src/scss",
+    }),
   ],
 };
