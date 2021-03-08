@@ -2,6 +2,8 @@ export default class Popup {
   constructor(content, callback) {
     this.callback = callback
 
+    console.log (callback)
+
     const popupElement = document.createElement("div");
     const contentElement = document.createElement("div");
     const closeBtnElement = document.createElement("div");

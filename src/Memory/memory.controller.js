@@ -10,16 +10,14 @@ export default class MemoryController {
     this.model = model;
     this.view = view;
 
-    // model bindings
+    // model events
     this.model.on("turnresolved", (turn) => this.onTurnResolved(turn));
     this.model.on("victory", (elapsed, highscores) => this.onVictory(elapsed, highscores));
-    this.model.on("timeupdate", (elasped, duration) =>
-      this.onTimeUpdate(elasped, duration)
-    );
+    this.model.on("timeupdate", (elasped, duration) => this.onTimeUpdate(elasped, duration));
     this.model.on("timeout", () => this.onTimeout());
 
-    // view bindings
-    this.view.on("cardselected", (cardIndex) => this.selectCard(cardIndex));
+    // view events
+    this.view.on("cardselected", (cardIndex) => this.onCardSelected(cardIndex));
     this.view.on("restartgame", () => this.start());
   }
 
@@ -61,8 +59,7 @@ export default class MemoryController {
    * signal and pass played cards to the model
    * @param {array} cardsIndexes - indexes of the two played cards
    */
-  selectCard(cardIndex) {
-    console.log("selectCard");
+  onCardSelected(cardIndex) {
     this.model.selectCard(cardIndex);
   }
 
@@ -84,6 +81,7 @@ export default class MemoryController {
    * start a new game
    */
   start() {
+    console.log ("start")
     this.model.init();
     this.view.init(this.model.getDeck());
   }

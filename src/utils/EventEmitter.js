@@ -1,12 +1,29 @@
+/**
+ * basic event emitter class
+ * it simply allow to emit/register to events
+ */
 export default class EventEmitter {
   constructor() {
-    this._events = {};
+    this.events = {}; // object to store events
   }
+
+  /**
+   * Register to an event
+   * @param {string} evt - event name
+   * @param {function} listener - handler to call
+   * @returns
+   */
   on(evt, listener) {
-    (this._events[evt] || (this._events[evt] = [])).push(listener);
+    (this.events[evt] || (this.events[evt] = [])).push(listener);
     return this;
   }
+
+  /**
+   * Emit an event
+   * @param {string} evt - event name
+   * @param  {...any} arg - arguments to pass to handler
+   */
   emit(evt, ...arg) {
-    (this._events[evt] || []).slice().forEach((lsn) => lsn(...arg));
+    (this.events[evt] || []).slice().forEach((listener) => listener(...arg));
   }
 }

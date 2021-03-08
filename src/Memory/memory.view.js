@@ -130,7 +130,6 @@ export default class MemoryView extends EventEmitter {
    * @param {Number} duration - game duration
    */
   onTimeUpdate(elapsed, duration) {
-    console.log("onTimeUpdate", elapsed, duration)
     this.progressBar.style.width = `${(elapsed / duration) * 100}%`;
   }
 
@@ -164,13 +163,9 @@ export default class MemoryView extends EventEmitter {
       container.innerHTML = `<p>Vous avez gagné en <br>${parseInt(
         elapsed / 1000
       )} secondes</p>`;
-
-        console.log (container)
-        console.log (scoresList)
-
       container.appendChild(scoresList);
       //create popup
-      new Popup(container, () => this.emit("restartGame"));
+      new Popup(container, () => this.emit("restartgame"));
     }, 500);
   }
 
