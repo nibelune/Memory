@@ -1,13 +1,19 @@
+import EventEmitter from "../utils/EventEmitter";
 import Popup from "./Popup";
 
 /**
  * Memory game view (DOM manipulations)
+ * it emits 2 event: 
+ *   "cardselected" when player select a card
+ *   "restartgame" when player close end of game popup
  * 
  * @constructor
  * @param {HTMLElement} element - the html element where to append the memory game.
  */
-export default class MemoryView {
+export default class MemoryView extends EventEmitter {
   constructor(element) {
+    super();
+
     this.element = element; //html container
 
     //create cards container element
@@ -25,9 +31,9 @@ export default class MemoryView {
   }
 
   //bindings
-  bindGetHighScores(handler) { this.getHighScores = handler; }
-  bindSelectCard(handler) { this.selectCard = handler; }
-  bindRestartGame(handler) { this.restartGame = handler; }
+  bindGetHighScores(handler) {
+    this.getHighScores = handler;
+  }
 
   /**
    * init/reset view
@@ -36,6 +42,8 @@ export default class MemoryView {
   init(deck) {
     this.playedCards = [];
     this.initCards(deck);
+    //event delegation
+    //https://javascript.info/event-delegation
     this.CardsContainer.onclick = (evt) => this.onCardClick(evt);
   }
 
@@ -45,13 +53,13 @@ export default class MemoryView {
    */
   initCards(deck) {
     // remove existing cards
-    const previousCards = this.element.querySelectorAll(".card");
-    previousCards.forEach((card) => card.remove());
+    this.CardsContainer.innerHTML = "";
 
+    //add new cards
     deck.forEach((cardId) => {
       const card = this.buildCard(cardId);
       this.CardsContainer.appendChild(card);
-    });    
+    });
   }
 
   /**
@@ -84,8 +92,7 @@ export default class MemoryView {
    * builds highscores list
    * @returns {HTMLElement} highscorelist
    */
-  async buildHighscores() {
-    const highscores = await this.getHighScores();
+  buildHighscores(highscores) {
     const scoresList = document.createElement("ul");
     scoresList.classList.add("highscores");
     // generate highscores list
@@ -94,8 +101,8 @@ export default class MemoryView {
       item.innerHTML = `<strong>${index + 1}</strong> ${score}`;
       scoresList.appendChild(item);
     });
-    
-    return scoresList
+
+    return scoresList;
   }
 
   /**
@@ -113,7 +120,7 @@ export default class MemoryView {
     ) {
       // flip the card
       clickedEl.classList.add("is-flipped");
-      this.selectCard(this.getCardIndex(clickedEl));
+      this.emit("cardselected", this.getCardIndex(clickedEl));
     }
   }
 
@@ -123,6 +130,7 @@ export default class MemoryView {
    * @param {Number} duration - game duration
    */
   onTimeUpdate(elapsed, duration) {
+    console.log("onTimeUpdate", elapsed, duration)
     this.progressBar.style.width = `${(elapsed / duration) * 100}%`;
   }
 
@@ -149,16 +157,20 @@ export default class MemoryView {
    * handler for victory
    * @param {Number} elapsed - time elapsed before victory
    */
-  onVictory(elapsed) {
-    setTimeout(async () => {
+  onVictory(elapsed, highscores) {
+    setTimeout(() => {
       const container = document.createElement("div");
-      const scoresList = await this.buildHighscores()
-      container.innerHTML = `<p>Vous avez gagné en <br>${
-        parseInt(elapsed / 1000)
-      } secondes</p>`;
+      const scoresList = this.buildHighscores(highscores);
+      container.innerHTML = `<p>Vous avez gagné en <br>${parseInt(
+        elapsed / 1000
+      )} secondes</p>`;
+
+        console.log (container)
+        console.log (scoresList)
+
       container.appendChild(scoresList);
       //create popup
-      new Popup(container, this.restartGame);
+      new Popup(container, () => this.emit("restartGame"));
     }, 500);
   }
 
@@ -175,7 +187,7 @@ export default class MemoryView {
 
     const container = document.createElement("p");
     container.innerHTML = "vous avez perdu";
-    new Popup(container, this.restartGame);
+    new Popup(container, () => this.emit("restartgame"));
   }
 
   /**

@@ -1,15 +1,17 @@
 import { readScores, createScore } from "./memory.api";
-
+import EventEmitter from "../utils/EventEmitter";
 /**
  * Memory game model
+ * It emits 4 events: turnresolved, victory, timeupdate and timeout
  * @constructor
  * @param {Number} cardsInGame - number of cards to use.
  * @param {Number} duration - game duration in seconds.
  */
-export default class MemoryModel {
+export default class MemoryModel extends EventEmitter {
   constructor(cardsInGame, duration) {
+    super();
     this.deck = []; // the deck of cards
-    this.selectedCards = [] // cards selected by player
+    this.selectedCards = []; // cards selected by player
     this.maxScore = cardsInGame; // maximum score
     this.score = 0; // current score
     this.startTime = 0; // time at begining of game
@@ -24,12 +26,6 @@ export default class MemoryModel {
     // double deck
     this.deck = this.deck.concat(...this.deck);
   }
-
-  // bindings
-  bindTurnResolved(handler) { this.onTurnResolved = handler; }
-  bindVictory(handler) { this.onVictory = handler; }
-  bindTimeUpdate(handler) { this.onTimeUpdate = handler; }
-  bindTimeout(handler) { this.onTimeout = handler; }
 
   /**
    * init/resest model
@@ -52,9 +48,9 @@ export default class MemoryModel {
     this.elapsed = now - this.startTime;
     if (this.elapsed > this.duration) {
       clearInterval(this.timerInterval);
-      this.onTimeout();
+      this.emit("timeout");
     } else {
-      this.onTimeUpdate(this.elapsed, this.duration);
+      this.emit("timeupdate", this.elapsed, this.duration);
     }
   }
 
@@ -62,6 +58,8 @@ export default class MemoryModel {
    * shuffle the deck
    */
   shuffle() {
+    // this is a quick and dirty shuffle, for something more effective look at Fisher–Yates Shuffle
+    // https://bost.ocks.org/mike/shuffle/
     this.deck.sort(() => Math.random() - 0.5);
   }
 
@@ -76,10 +74,10 @@ export default class MemoryModel {
    * select a card from deck
    * @param {number} cardIndex - index of selected card
    */
-  selectCard(cardIndex){
-    this.selectedCards.push(cardIndex)
-    if(this.selectedCards.length === 2){
-      this.resolveTurn()
+  selectCard(cardIndex) {
+    this.selectedCards.push(cardIndex);
+    if (this.selectedCards.length === 2) {
+      this.resolveTurn();
     }
   }
 
@@ -88,32 +86,27 @@ export default class MemoryModel {
    * @param {Array} playedCards - array containing the index of 2 cards
    */
   resolveTurn() {
+    let match;
     if (this.deck[this.selectedCards[0]] == this.deck[this.selectedCards[1]]) {
       this.score += 1;
-      this.onTurnResolved({ match: true, cards: this.selectedCards });
+      match = true;
       this.checkVictory();
     } else {
-      this.onTurnResolved({ match: false, cards: this.selectedCards });
+      match = false;
     }
+    this.emit("turnresolved", { match, cards: this.selectedCards });
     this.selectedCards = [];
   }
 
   /**
    * check victory
    */
-  checkVictory() {
+  async checkVictory() {
     if (this.score == this.maxScore) {
       clearInterval(this.timerInterval);
-      createScore(parseInt(this.elapsed / 1000));
-      this.onVictory(this.elapsed);
+      await createScore(parseInt(this.elapsed / 1000));
+      const highscores = await readScores();
+      this.emit("victory", this.elapsed, highscores);
     }
-  }
-
-  /**
-   * return highscores
-   */
-  async getHighScores() {
-    const highscores = await readScores();
-    return highscores;
   }
 }
