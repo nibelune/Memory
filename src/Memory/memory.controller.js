@@ -11,15 +11,16 @@ export default class MemoryController {
     this.view = view;
 
     // model bindings
-    this.model.bindTurnResolved((turn) => this.onTurnResolved(turn));
-    this.model.bindVictory((elapsed) => this.onVictory(elapsed));
-    this.model.bindTimeout(() => this.onTimeout());
-    this.model.bindTimeUpdate((elasped, duration) => this.onTimeUpdate(elasped, duration));
+    this.model.on("turnresolved", (turn) => this.onTurnResolved(turn));
+    this.model.on("victory", (elapsed, highscores) => this.onVictory(elapsed, highscores));
+    this.model.on("timeupdate", (elasped, duration) =>
+      this.onTimeUpdate(elasped, duration)
+    );
+    this.model.on("timeout", () => this.onTimeout());
 
     // view bindings
-    this.view.bindSelectCard((cardIndex) => this.selectCard(cardIndex));
-    this.view.bindRestartGame(() => this.start());
-    this.view.bindGetHighScores(() => this.getHighscores())
+    this.view.on("cardselected", (cardIndex) => this.selectCard(cardIndex));
+    this.view.on("restartgame", () => this.start());
   }
 
   /**
@@ -27,6 +28,7 @@ export default class MemoryController {
    * @param {Array} turn - an array with the index of the two mismatching cards
    */
   onTurnResolved(turn) {
+    console.log("onTurnResolved");
     this.view.onTurnResolved(turn);
   }
 
@@ -34,8 +36,8 @@ export default class MemoryController {
    * signal victory and pass time elapsed to view
    * @param {number} elapsed - duration of the game in seconds
    */
-  onVictory(elapsed) {
-    this.view.onVictory(elapsed);
+  onVictory(elapsed, highscores) {
+    this.view.onVictory(elapsed, highscores);
   }
 
   /**
@@ -51,6 +53,7 @@ export default class MemoryController {
    * @param {number} duration - max duration of the game in ms
    */
   onTimeUpdate(elasped, duration) {
+    console.log("onTimeUpdate");
     this.view.onTimeUpdate(elasped, duration);
   }
 
@@ -58,7 +61,8 @@ export default class MemoryController {
    * signal and pass played cards to the model
    * @param {array} cardsIndexes - indexes of the two played cards
    */
-   selectCard(cardIndex) {
+  selectCard(cardIndex) {
+    console.log("selectCard");
     this.model.selectCard(cardIndex);
   }
 
@@ -72,7 +76,7 @@ export default class MemoryController {
   /**
    * return highscores
    */
-   getHighscores() {
+  getHighscores() {
     return this.model.getHighScores();
   }
 
