@@ -56,9 +56,10 @@ export default class MemoryView extends EventEmitter {
     this.CardsContainer.innerHTML = "";
 
     //add new cards
+    const cards = []
     deck.forEach((cardId) => {
-      const card = this.buildCard(cardId);
-      this.CardsContainer.appendChild(card);
+      cards.push(this.buildCard(cardId));
+      this.CardsContainer.append(...cards);
     });
   }
 
