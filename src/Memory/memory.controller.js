@@ -26,7 +26,6 @@ export default class MemoryController {
    * @param {Array} turn - an array of objects {match:{Boolean}, cards:{Array}}
    */
   onTurnResolved(turn) {
-    console.log("onTurnResolved");
     this.view.onTurnResolved(turn);
   }
 
@@ -51,7 +50,6 @@ export default class MemoryController {
    * @param {number} duration - max duration of the game in ms
    */
   onTimeUpdate(elasped, duration) {
-    console.log("onTimeUpdate");
     this.view.onTimeUpdate(elasped, duration);
   }
 

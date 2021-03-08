@@ -148,7 +148,7 @@ export default class MemoryView extends EventEmitter {
       if (turn.match) {
         cards.forEach((card) => card.classList.add("is-matched"));
       }
-      cards.forEach((card) => card.classList.add("is-flipped"));
+      cards.forEach((card) => card.classList.remove("is-flipped"));
     }, 500);
   }
 
