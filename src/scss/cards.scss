@@ -5,6 +5,7 @@
   perspective: 1000px;
   margin: 10px;
   cursor: pointer;
+
   &.is-flipped,
   &.is-matched {
     cursor: auto;
@@ -20,7 +21,7 @@
     }
   }
   &.is-matched{
-    animation-duration: 0.5s;
+    animation-duration: 0.75s;
     animation-name: rubberBand;
 
     @keyframes rubberBand {
@@ -53,6 +54,7 @@
       }
     }
   }
+
   .card-faces-container {
     position: relative;
     width: 100%;
@@ -61,6 +63,7 @@
     transform-style: preserve-3d;
     pointer-events: none;
   }
+
   .card-face-front,
   .card-face-back {
     border-radius: 8px;
