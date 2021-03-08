@@ -32,7 +32,7 @@ npm install
 ```
 2. Configuration de la base de données dans le fichier server/environment.js
 ```javascript
-dbUrl: "mongodb://localhost:27017/memory?retryWrites=true&w=majority",
+dbUrl: "mongodb://localhost:27017/memory?retryWrites=true",
 ```
 2. Démarrage du serveur 
 ```

@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const morgan = require('morgan'); // usefull for debug
+const morgan = require('morgan'); // log, usefull for debug
 const path = require('path'); // resolves paths
 const index = require('./routes'); // server routes
 require('./database'); // db connection
