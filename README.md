@@ -41,6 +41,6 @@ npm run start
 
 ## Pistes d'améliorations
 
-- demander son nom à l'utilisataur afin de l'associer à son score
+- demander son nom au joueur afin de l'associer à son score
 - gestion des erreurs
 - tests
