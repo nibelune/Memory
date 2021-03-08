@@ -1,5 +1,5 @@
 /**
- * retrieve all scores from DB
+ * read scores from server
  */
 const readScores = async () => {
   return fetch("/scores", { method: "GET" })
@@ -12,7 +12,7 @@ const readScores = async () => {
 
 /**
  * submit new score to server
- * @param {number} score - the score to add to DB.
+ * @param {number} score - the score to add
  */
 const createScore = async (score) => {
   return fetch("/scores", {
