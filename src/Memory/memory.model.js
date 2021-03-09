@@ -94,7 +94,7 @@ export default class MemoryModel extends EventEmitter {
    */
   resolveTurn() {
     let cardsMatch;
-    //if the card face is the same on the 2 cards
+    //if the card face is the same on the 2 selected cards
     if (this.deck[this.selectedCards[0]] === this.deck[this.selectedCards[1]]) {
       this.score += 1;
       cardsMatch = true;

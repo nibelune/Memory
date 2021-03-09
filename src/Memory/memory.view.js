@@ -50,7 +50,7 @@ export default class MemoryView extends EventEmitter {
     this.cardsContainer.innerHTML = "";
 
     //build new cards
-    const cards = []
+    const cards = [];
     deck.forEach((cardId) => {
       cards.push(this.buildCard(cardId));
     });
@@ -109,12 +109,13 @@ export default class MemoryView extends EventEmitter {
   onCardClick(evt) {
     //get clicked element
     const clickedEl = evt.target;
-    // if element is a clickable card
-    if (
+
+    const isAClickableCard =
       !clickedEl.classList.contains("is-flipped") &&
       !clickedEl.classList.contains("is-matched") &&
-      clickedEl.classList.contains("card")
-    ) {
+      clickedEl.classList.contains("card");
+      
+    if (isAClickableCard) {
       // flip the card
       clickedEl.classList.add("is-flipped");
       this.emit("cardselected", this.getCardIndex(clickedEl));
@@ -183,7 +184,7 @@ export default class MemoryView extends EventEmitter {
     const scoresList = this.buildHighscores(highscores);
     const container = document.createElement("div");
     container.innerHTML = "<p>vous avez perdu</p>";
-    container.appendChild(scoresList)
+    container.appendChild(scoresList);
     new Popup(container, () => this.emit("restartgame"));
   }
 
