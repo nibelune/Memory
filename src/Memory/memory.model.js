@@ -32,7 +32,7 @@ export default class MemoryModel extends EventEmitter {
    * init/resest model
    */
   init() {
-    this.shuffle();
+    this.shuffleDeck();
     this.score = 0;
     this.startTime = new Date().getTime();
     this.elapsed = 0;
@@ -44,7 +44,7 @@ export default class MemoryModel extends EventEmitter {
   /**
    * update timer and check timeout
    */
-  async updateTimer() {
+  updateTimer() {
     const now = new Date().getTime();
     this.elapsed = now - this.startTime;
     if (this.elapsed > this.duration) {
@@ -59,7 +59,7 @@ export default class MemoryModel extends EventEmitter {
   /**
    * shuffle the deck
    */
-  shuffle() {
+  shuffleDeck() {
     // this is a quick and dirty shuffle, for something more effective look at Fisher–Yates Shuffle
     // https://bost.ocks.org/mike/shuffle/
     this.deck.sort(() => Math.random() - 0.5);
@@ -87,15 +87,15 @@ export default class MemoryModel extends EventEmitter {
    * resolve a turn
    */
   resolveTurn() {
-    let match;
+    let cardsMatch;
     if (this.deck[this.selectedCards[0]] == this.deck[this.selectedCards[1]]) {
       this.score += 1;
-      match = true;
+      cardsMatch = true;
       this.checkVictory();
     } else {
-      match = false;
+      cardsMatch = false;
     }
-    this.emit("turnresolved", { match, cards: this.selectedCards });
+    this.emit("turnresolved", { cardsMatch, cards: this.selectedCards });
     this.selectedCards = [];
   }
 

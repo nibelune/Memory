@@ -6,7 +6,7 @@
   "scripts": {
     "start": "PORT=80 node server/app.js",
     "dev": "rollup -c -w",
-    "devserver": "PORT=8080 nodemon server/app.js"
+    "dev-server": "PORT=8080 nodemon server/app.js"
   },
   "author": "",
   "license": "ISC",
