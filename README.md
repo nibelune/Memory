@@ -4,14 +4,14 @@ Malbouffe, stress, abus en tout genre, Alzheimer nous guette tous ! Fais travail
 
 ## technos 
 
-Front : html / css / js  
-Back : node / express / mongoDB / pug  
+ - Front : html / css / js  
+ - Back : node / express / mongoDB / pug  
 
 ## Comment ça fonctionne ?
 
 ### Le front
 
-app.js initialise le jeu (on peut de là changer le nombres de cartes ou la durée d'une partie pour faciliter les tests)
+app.js initialise le jeu (on peut changer le nombres de cartes ou la durée d'une partie pour faciliter les tests)
 
 Le jeu repose sur une architechture MVC
   - le modéle a en charge la gestion de l'état, la logique du jeu et la communication avec l'API
@@ -46,3 +46,10 @@ npm run start
 - demander son nom au joueur afin de l'associer à son score
 - gestion des erreurs
 - tests
+
+### Remarques
+
+Au départ je ne savais pas trop quelle voie prendre... un memory... c'est simple... mmh... c'est louche...
+
+Alors je me suis imaginé ça comme un support de cours sur MVC, destiné à des apprenants qui connaissent déjà JS coté front et back. Typiquement un cours pour un développeur fullstack JS.  
+Je n'ai pas utilisé JQuery parce que j'appécie que le client pèse 6ko. 
