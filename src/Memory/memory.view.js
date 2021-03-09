@@ -35,7 +35,6 @@ export default class MemoryView extends EventEmitter {
    * @param {array} deck - array with the deck
    */
   init(deck) {
-    this.playedCards = [];
     this.initCards(deck);
     //event delegation
     //https://javascript.info/event-delegation
@@ -50,12 +49,14 @@ export default class MemoryView extends EventEmitter {
     // remove existing cards
     this.cardsContainer.innerHTML = "";
 
-    //add new cards
+    //build new cards
     const cards = []
     deck.forEach((cardId) => {
       cards.push(this.buildCard(cardId));
-      this.cardsContainer.append(...cards);
     });
+
+    //add all cards at once to minimize browser reflow
+    this.cardsContainer.append(...cards);
   }
 
   /**

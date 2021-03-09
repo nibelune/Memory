@@ -6,6 +6,7 @@ const express = require('express');
 const morgan = require('morgan'); // log, usefull for debug
 const path = require('path'); // resolves paths
 const index = require('./routes'); // server routes
+const errorHandler = require('errorhandler'); // show errors on front (not to use in production)
 require('./database'); // db connection
 
 const app = express();
@@ -21,7 +22,21 @@ app.use(express.static(path.join(__dirname, '../public'))); // serve static asse
 app.use(express.json()); // gives access to req.body 
 app.use(index); // set routing
 
+// add errorHandler middleware in dev only
+if (process.env.NODE_ENV === 'development') {
+  app.use(errorHandler());
+} else {
+  app.use((err, req, res, next) => {
+    const code = err.code || 500;
+    res.status(code).json({
+      code: code,
+      message: code === 500 ? null : err.message
+    });
+  })
+}
+
 // start server
 app.listen(port, () => {
   console.log(`memory game is ready on http://localhost:${port}`)
 });
+

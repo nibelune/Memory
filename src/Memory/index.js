@@ -3,7 +3,8 @@ import MemoryView from "./memory.view";
 import MemoryController from "./memory.controller";
 
 /**
- * A memory game.
+ * A MVC memory game.
+ * https://www.tomdalling.com/blog/software-design/model-view-controller-explained/
  * @constructor
  * @param {number} cardsInGame - the number of different cards to use (1-18).
  * @param {number} duration - the maximum duration of a game in seconds.

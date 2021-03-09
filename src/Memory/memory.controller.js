@@ -9,7 +9,13 @@ export default class MemoryController {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-
+    
+    /**
+     * there is loads of ways to implement MVC. Here we are simply using events.
+     * the model and the view both extend an EventEmitter class and emit events when required.
+     * the controller simply listens for those events to call the corresponding handlers
+     */
+    
     // model events
     this.model.on("turnresolved", (turn) => this.onTurnResolved(turn));
     this.model.on("victory", (elapsed, highscores) => this.onVictory(elapsed, highscores));
@@ -19,6 +25,14 @@ export default class MemoryController {
     // view events
     this.view.on("cardselected", (cardIndex) => this.onCardSelected(cardIndex));
     this.view.on("restartgame", () => this.start());
+  }
+
+  /**
+   * start a new game
+   */
+   start() {
+    this.model.init();
+    this.view.init(this.model.getDeck());
   }
 
   /**
@@ -66,14 +80,5 @@ export default class MemoryController {
    */
   getDeck() {
     return this.model.getDeck();
-  }
-
-  /**
-   * start a new game
-   */
-  start() {
-    console.log ("start")
-    this.model.init();
-    this.view.init(this.model.getDeck());
   }
 }
