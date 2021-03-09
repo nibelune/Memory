@@ -1,5 +1,6 @@
 import API from "./memory.api";
 import EventEmitter from "../utils/EventEmitter";
+
 /**
  * Memory game model
  * It emits 4 events: turnresolved, victory, timeupdate and timeout
@@ -18,7 +19,7 @@ export default class MemoryModel extends EventEmitter {
     this.elapsed = 0; // time elasped since begining of game
     this.duration = duration * 1000; // game duration in ms
 
-    // populate deck
+    // populate deck (each number correponds to a different card face)
     for (let i = 1; i <= cardsInGame; i++) {
       this.deck.push(i);
     }
@@ -37,7 +38,7 @@ export default class MemoryModel extends EventEmitter {
     this.elapsed = 0;
     this.timerInterval = setInterval(() => {
       this.updateTimer();
-    }, 10);
+    }, 20);
   }
 
   /**

@@ -5,7 +5,7 @@ import Popup from "./Popup";
  * Memory game view (DOM manipulations)
  * it emits 2 event:
  *   "cardselected" when player select a card
- *   "restartgame" when player close end of game popup
+ *   "restartgame" when player close final popup
  *
  * @constructor
  * @param {HTMLElement} element - the html element where to append the memory game.
@@ -17,9 +17,9 @@ export default class MemoryView extends EventEmitter {
     this.element = element; //html container
 
     //create cards container element
-    this.CardsContainer = document.createElement("div");
-    this.CardsContainer.classList.add("board");
-    this.element.appendChild(this.CardsContainer);
+    this.cardsContainer = document.createElement("div");
+    this.cardsContainer.classList.add("board");
+    this.element.appendChild(this.cardsContainer);
 
     //create timer elements
     this.progressBar = document.createElement("div");
@@ -28,11 +28,6 @@ export default class MemoryView extends EventEmitter {
     timer.classList.add("timer-container");
     timer.appendChild(this.progressBar);
     this.element.appendChild(timer);
-  }
-
-  //bindings
-  bindGetHighScores(handler) {
-    this.getHighScores = handler;
   }
 
   /**
@@ -44,7 +39,7 @@ export default class MemoryView extends EventEmitter {
     this.initCards(deck);
     //event delegation
     //https://javascript.info/event-delegation
-    this.CardsContainer.onclick = (evt) => this.onCardClick(evt);
+    this.cardsContainer.onclick = (evt) => this.onCardClick(evt);
   }
 
   /**
@@ -53,13 +48,13 @@ export default class MemoryView extends EventEmitter {
    */
   initCards(deck) {
     // remove existing cards
-    this.CardsContainer.innerHTML = "";
+    this.cardsContainer.innerHTML = "";
 
     //add new cards
     const cards = []
     deck.forEach((cardId) => {
       cards.push(this.buildCard(cardId));
-      this.CardsContainer.append(...cards);
+      this.cardsContainer.append(...cards);
     });
   }
 
@@ -159,11 +154,11 @@ export default class MemoryView extends EventEmitter {
    */
   onVictory(elapsed, highscores) {
     //remove click event handler
-    this.CardsContainer.onclick = null;
+    this.cardsContainer.onclick = null;
 
     setTimeout(() => {
-      const container = document.createElement("div");
       const scoresList = this.buildHighscores(highscores);
+      const container = document.createElement("div");
       container.innerHTML = `<p>Vous avez gagné en <br>${parseInt(
         elapsed / 1000
       )} secondes</p>`;
@@ -182,9 +177,8 @@ export default class MemoryView extends EventEmitter {
     progressElement.style.width = "100%";
 
     //remove click event handler
-    this.CardsContainer.onclick = null;
+    this.cardsContainer.onclick = null;
 
-    //build hiscores
     const scoresList = this.buildHighscores(highscores);
     const container = document.createElement("div");
     container.innerHTML = "<p>vous avez perdu</p>";
@@ -198,7 +192,7 @@ export default class MemoryView extends EventEmitter {
    * @returns {HTMLElement}
    */
   getCardByIndex(index) {
-    return this.CardsContainer.querySelectorAll(".card")[index];
+    return this.cardsContainer.querySelectorAll(".card")[index];
   }
 
   /**
@@ -207,6 +201,6 @@ export default class MemoryView extends EventEmitter {
    * @returns {number} - index of the card
    */
   getCardIndex(card) {
-    return [...this.CardsContainer.querySelectorAll(".card")].indexOf(card);
+    return [...this.cardsContainer.querySelectorAll(".card")].indexOf(card);
   }
 }
