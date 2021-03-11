@@ -52,6 +52,7 @@ Après construction de l'image le jeu est accessible sur http://localhost
 
 - demander son nom au joueur afin de l'associer à son score
 - gestion des erreurs
+- refactoriser en utilisant des web components
 - tests
 
 ### Remarques
