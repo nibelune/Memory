@@ -46,7 +46,7 @@ Il est également possible de tetser l'application en utilisant Docker
 ```
 docker-compose up --build
 ```
-Après construction de l'imge le jeu est accsible sur http://localhost
+Après construction de l'image le jeu est accessible sur http://localhost
 
 ## Pistes d'améliorations
 
