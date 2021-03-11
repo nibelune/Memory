@@ -20,8 +20,9 @@ export default class MemoryModel extends EventEmitter {
     this.startTime = 0; // time at begining of game
     this.elapsed = 0; // time elasped since begining of game
     this.duration = duration * 1000; // game duration in ms
+    this.timerInterval = null //timer interval reference
 
-    // populate deck (each number correponds to a different card face)
+    // populate deck (each number correponds to a different card's face)
     for (let i = 1; i <= cardsPairs; i++) {
       this.deck.push(i);
     }
@@ -33,7 +34,7 @@ export default class MemoryModel extends EventEmitter {
   /**
    * init/resest model
    */
-  init() {
+   start() {
     this.shuffleDeck();
     this.score = 0;
     this.selectedCards = [];

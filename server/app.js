@@ -6,7 +6,7 @@ const express = require('express');
 const morgan = require('morgan'); // log, usefull for debug
 const path = require('path'); // resolves paths
 const index = require('./routes'); // server routes
-const errorHandler = require('errorhandler'); // show errors on front (not to use in production)
+const errorHandler = require('errorhandler'); // show errors on front (not to be used in production)
 require('./database'); // db connection
 
 const app = express();
@@ -18,7 +18,7 @@ app.set('view engine', 'pug');
 
 // add express middlewares
 app.use(morgan('short')); // use morgan for logs
-app.use(express.static(path.join(__dirname, '../public'))); // serve static assets
+app.use(express.static(path.join(__dirname, '/public'))); // serve static assets
 app.use(express.json()); // gives access to req.body 
 app.use(index); // set routing
 

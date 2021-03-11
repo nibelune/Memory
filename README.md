@@ -34,12 +34,16 @@ npm install
 ```
 2. Configuration de la base de données dans le fichier server/environment.js
 ```javascript
-dbUrl: "mongodb://localhost:27017/memory?retryWrites=true"
+dbUrl: "mongodb://mongo:27017/memory?retryWrites=true",
 ```
-2. Démarrage du serveur 
+3. Démarrage du serveur 
 ```
 npm run start
 ```
+## Docker
+
+
+
 
 ## Pistes d'améliorations
 
@@ -52,4 +56,4 @@ npm run start
 Au départ je ne savais pas trop quelle voie prendre... un memory... c'est simple... mmh... c'est louche...
 
 Alors je me suis imaginé ça comme un support de cours sur MVC, destiné à des apprenants qui connaissent déjà JS coté front et back. Typiquement un cours pour un développeur fullstack JS.  
-Je n'ai pas utilisé JQuery parce que j'appécie que le client pèse 6ko. 
+Je n'ai pas utilisé JQuery parce que j'appécie que le client pèse 6ko.

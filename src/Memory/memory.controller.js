@@ -4,7 +4,6 @@
  * @param {MemoryModel} model - the memory model.
  * @param {MemoryView} view - the memory view.
  */
-
 export default class MemoryController {
   constructor(model, view) {
     this.model = model;
@@ -31,8 +30,8 @@ export default class MemoryController {
    * start a new game
    */
    start() {
-    this.model.init();
-    this.view.init(this.model.getDeck());
+    this.model.start();
+    this.view.start(this.model.getDeck());
   }
 
   /**

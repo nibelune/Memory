@@ -1,8 +1,13 @@
+/**
+ * a basic popup
+ * @param {HTMLElement} content - the content of the popup
+ * @param {Function} callback - function to call poup is closed
+ */
 export default class Popup {
   constructor(content, callback) {
-    this.callback = callback
+    this.callback = callback;
 
-    console.log (callback)
+    console.log(callback);
 
     const popupElement = document.createElement("div");
     const contentElement = document.createElement("div");
@@ -11,7 +16,7 @@ export default class Popup {
     popupElement.classList.add("popup");
     contentElement.classList.add("content");
     closeBtnElement.classList.add("close-btn");
-    closeBtnElement.textContent = "Fermer"
+    closeBtnElement.textContent = "Fermer";
 
     contentElement.appendChild(content);
     popupElement.appendChild(contentElement);
@@ -22,11 +27,12 @@ export default class Popup {
     document.body.appendChild(popupElement);
   }
 
+
   close(evt) {
     evt.target.parentElement.remove();
     if (this.callback) {
       this.callback();
-      this.callback= null;
+      this.callback = null;
     }
   }
 }

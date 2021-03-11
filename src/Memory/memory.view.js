@@ -1,5 +1,7 @@
 import EventEmitter from "../utils/EventEmitter";
-import Popup from "./Popup";
+import Card from "./components/Card";
+import Timer from "./components/Timer";
+import Popup from "./components/Popup";
 
 /**
  * Memory game view (DOM manipulations)
@@ -14,27 +16,23 @@ export default class MemoryView extends EventEmitter {
   constructor(element) {
     super();
 
-    this.element = element; //html container
+    this.element = element; // html container
+    this.cards = []; // Cards objects
 
-    //create cards container element
+    // create cards container element
     this.cardsContainer = document.createElement("div");
     this.cardsContainer.classList.add("board");
     this.element.appendChild(this.cardsContainer);
 
-    //create timer elements
-    this.progressBar = document.createElement("div");
-    this.progressBar.classList.add("progress");
-    const timer = document.createElement("div");
-    timer.classList.add("timer-container");
-    timer.appendChild(this.progressBar);
-    this.element.appendChild(timer);
+    this.timer = new Timer();
+    this.timer.appendTo(this.element);
   }
 
   /**
    * init/reset view
    * @param {array} deck - array with the deck
    */
-  init(deck) {
+  start(deck) {
     this.initCards(deck);
     //event delegation
     //https://javascript.info/event-delegation
@@ -48,41 +46,15 @@ export default class MemoryView extends EventEmitter {
   initCards(deck) {
     // remove existing cards
     this.cardsContainer.innerHTML = "";
+    this.cards = [];
 
-    //build new cards
-    const cards = [];
-    deck.forEach((cardId) => {
-      cards.push(this.buildCard(cardId));
+    //add new cards
+    this.cards = [];
+    deck.forEach((cardFace) => {
+      const card = new Card(cardFace);
+      this.cards.push(card);
     });
-
-    //add all cards at once to minimize browser reflow
-    this.cardsContainer.append(...cards);
-  }
-
-  /**
-   * builds a card
-   * @param {Number} cardId - id of the face of the card
-   * @returns {HTMLElement} a card
-   */
-  buildCard(cardId) {
-    // create html elements
-    const card = document.createElement("div");
-    const cardFacesContainer = document.createElement("div");
-    const front = document.createElement("div");
-    const back = document.createElement("div");
-
-    // set elements classes
-    card.classList.add("card");
-    cardFacesContainer.classList.add("card-faces-container");
-    front.classList.add("card-face-front", `card-face-${cardId}`);
-    back.classList.add("card-face-back");
-
-    // appends elements
-    cardFacesContainer.appendChild(front);
-    cardFacesContainer.appendChild(back);
-    card.append(cardFacesContainer);
-
-    return card;
+    this.cards.forEach((card) => card.appendTo(this.cardsContainer));
   }
 
   /**
@@ -110,14 +82,12 @@ export default class MemoryView extends EventEmitter {
     //get clicked element
     const clickedEl = evt.target;
 
-    const isAClickableCard =
-      !clickedEl.classList.contains("is-flipped") &&
-      !clickedEl.classList.contains("is-matched") &&
-      clickedEl.classList.contains("card");
-      
-    if (isAClickableCard) {
-      // flip the card
-      clickedEl.classList.add("is-flipped");
+    //check if it's a card or exit
+    if (!clickedEl.classList.contains("card")) return;
+
+    const clickedCard = this.cards[this.getCardIndex(clickedEl)];
+    if (clickedCard.isClickable()) {
+      clickedCard.flipIn();
       this.emit("cardselected", this.getCardIndex(clickedEl));
     }
   }
@@ -128,7 +98,7 @@ export default class MemoryView extends EventEmitter {
    * @param {Number} duration - game duration
    */
   onTimeUpdate(elapsed, duration) {
-    this.progressBar.style.width = `${(elapsed / duration) * 100}%`;
+    this.timer.setProgress(elapsed / duration);
   }
 
   /**
@@ -139,14 +109,14 @@ export default class MemoryView extends EventEmitter {
    */
   onTurnResolved(turn) {
     setTimeout(() => {
-      const cards = [
-        this.getCardByIndex(turn.cards[0]),
-        this.getCardByIndex(turn.cards[1]),
+      const playedCards = [
+        this.cards[turn.cards[0]],
+        this.cards[turn.cards[1]],
       ];
       if (turn.cardsMatch) {
-        cards.forEach((card) => card.classList.add("is-matched"));
+        playedCards.forEach((card) => card.match());
       }
-      cards.forEach((card) => card.classList.remove("is-flipped"));
+      playedCards.forEach((card) => card.flipOut());
     }, 500);
   }
 
@@ -159,14 +129,8 @@ export default class MemoryView extends EventEmitter {
     this.cardsContainer.onclick = null;
 
     setTimeout(() => {
-      const scoresList = this.buildHighscores(highscores);
-      const container = document.createElement("div");
-      container.innerHTML = `<p>Vous avez gagné en <br>${parseInt(
-        elapsed / 1000
-      )} secondes</p>`;
-      container.appendChild(scoresList);
-      //create popup
-      new Popup(container, () => this.emit("restartgame"));
+      const msg = `Vous avez gagné en <br>${parseInt(elapsed / 1000)} secondes`;
+      this.openPopup(msg, highscores, () => this.emit("restartgame"));
     }, 500);
   }
 
@@ -174,31 +138,30 @@ export default class MemoryView extends EventEmitter {
    * handler for timeout
    */
   onTimeout(highscores) {
-    //set timer progress bar width
-    const progressElement = this.element.querySelector(".progress");
-    progressElement.style.width = "100%";
-
-    //remove click event handler
+    this.timer.setProgress(1);
     this.cardsContainer.onclick = null;
 
-    const scoresList = this.buildHighscores(highscores);
-    const container = document.createElement("div");
-    container.innerHTML = "<p>vous avez perdu</p>";
-    container.appendChild(scoresList);
-    new Popup(container, () => this.emit("restartgame"));
+    this.openPopup("Vous avez perdu...", highscores, () =>
+      this.emit("restartgame")
+    );
   }
 
   /**
-   * get a card according to its index
-   * @param {index} index - index of the card
-   * @returns {HTMLElement}
+   * open a popup
+   * @param {String} msg
+   * @param {Array} highscores
+   * @param {Function} callback
    */
-  getCardByIndex(index) {
-    return this.cardsContainer.querySelectorAll(".card")[index];
+  openPopup(msg, highscores, callback) {
+    const scoresList = this.buildHighscores(highscores);
+    const popupContent = document.createElement("div");
+    popupContent.innerHTML = `<p>${msg}</p>`;
+    popupContent.appendChild(scoresList);
+    new Popup(popupContent, () => callback());
   }
 
   /**
-   * get index of a specific card
+   * get index of a card
    * @param {HTMLElement} card - card
    * @returns {number} - index of the card
    */

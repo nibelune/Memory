@@ -4,7 +4,7 @@
   "description": "a memory game",
   "main": "server/app.js",
   "scripts": {
-    "start": "NODE_ENV=production PORT=80 node server/app.js",
+    "start": "NODE_ENV=production PORT=8080 node server/app.js",
     "dev": "rollup -c -w",
     "dev-server": "NODE_ENV=development PORT=8080 nodemon server/app.js"
   },

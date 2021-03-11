@@ -4,7 +4,7 @@ const env = require("../environment");
  * Connection to mongoDB
  */
 mongoose
-  .connect(env.dbUrl, {
+  .connect(env[process.env.NODE_ENV].dbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,

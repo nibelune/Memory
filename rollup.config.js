@@ -9,16 +9,16 @@ export default {
   input: "src/app.js",
   output: {
     format: "module",
-    file: "public/js/app.js",
+    file: "server/public/js/app.js",
   },
 
   plugins: [
     commonjs(),
     noderesolve(),
     babel({ babelHelpers: "bundled" }),
-    terser(),
+    //terser(),
     scss({
-      output: "public/css/memory.css",
+      output: "server/public/css/memory.css",
       outputStyle: "compressed",
       watch: "src/scss",
     }),
