@@ -16,7 +16,7 @@ export default {
     commonjs(),
     noderesolve(),
     babel({ babelHelpers: "bundled" }),
-    //terser(),
+    terser(),
     scss({
       output: "server/public/css/memory.css",
       outputStyle: "compressed",
