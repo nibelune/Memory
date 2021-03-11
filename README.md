@@ -42,8 +42,11 @@ npm run start
 ```
 ## Docker
 
-
-
+Il est également possible de tetser l'application en utilisant Docker
+```
+docker-compose up --build
+```
+Après construction de l'imge le jeu est accsible sur http://localhost
 
 ## Pistes d'améliorations
 
