@@ -42,7 +42,7 @@ npm run start
 ```
 ## Docker
 
-Il est également possible de tetser l'application en utilisant Docker
+Il est également possible de tester l'application en utilisant Docker
 ```
 docker-compose up --build
 ```
